@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">GithubUser</string>
+    <string name="github_user">Github User</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="repositories">Repositories</string>
+    <string name="company">Company</string>
+    <string name="icha_fullName">Annisaa Utami</string>
+    <string name="icha_userName">auttmme</string>
+    <string name="ct_location">location</string>
+    <string name="ct_avatar">user avatar</string>
+    <string name="ct_office">office</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="search_user">Search User</string>
+    <string name="search">search</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="content_tab_followers">Fragment Followers</string>
+    <string name="content_tab_following">Fragment Following</string>
+
+</resources>
