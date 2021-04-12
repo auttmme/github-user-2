@@ -5,27 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.auttmme.githubuser.databinding.FragmentFollowerBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FollowerFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FollowerFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var adapter: UserAdapter
+    private var _binding: FragmentFollowerBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var followersViewModel: FollowersViewModel
+
+    companion object {
+        private const val USERNAME = "username"
+
+        fun newInstance(username: String?): FollowerFragment {
+            val fragment = FollowerFragment()
+            val bundle = Bundle()
+            bundle.putString(USERNAME, username)
+            fragment.arguments = bundle
+            return fragment
         }
     }
 
@@ -33,27 +32,44 @@ class FollowerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_follower, container, false)
+        _binding = FragmentFollowerBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FollowerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FollowerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val username = arguments?.getString(USERNAME)
+        setRecyclerView(username)
+
+        followersViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowersViewModel::class.java)
+
+        if (username != null) {
+            showLoading(true)
+            followersViewModel.setFollowers(username)
+        }
+
+        followersViewModel.getFollowers().observe(viewLifecycleOwner, {
+            followers -> if (followers != null) {
+            adapter.setData(followers)
+            showLoading(false)
+        }
+        })
     }
+
+    private fun setRecyclerView(username: String?) {
+        adapter = UserAdapter()
+        adapter.notifyDataSetChanged()
+
+        binding.rvUsers.layoutManager = LinearLayoutManager(activity)
+        binding.rvUsers.adapter = adapter
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
 }

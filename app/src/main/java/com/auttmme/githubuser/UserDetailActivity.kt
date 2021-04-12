@@ -2,6 +2,7 @@ package com.auttmme.githubuser
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,35 +38,40 @@ class UserDetailActivity : AppCompatActivity() {
 
         val user = intent.getParcelableExtra<User>(EXTRA_USER)
 
+        user.username?.let {
+            if (user != null) {
+                detailViewModel.setDetail(it)
+                showLoading(true)
+            }
+        }
+
         detailViewModel.getDetail().observe(this, {
             itemDetailUser -> if (itemDetailUser != null) {
 
+            with(binding){
+                Glide.with(this@UserDetailActivity)
+                        .load(itemDetailUser.photo)
+                        .apply(RequestOptions().override(55,55))
+                        .into(imgDetailPhoto)
+
+                tvDetailUsername.text = itemDetailUser.username
+                tvDetailFullName.text = itemDetailUser.name
+                tvLocation.text = itemDetailUser.location
+                tvDetailFollowers.text = itemDetailUser.followers.toString()
+                tvDetailFollowing.text = itemDetailUser.following.toString()
+                tvDetailRepo.text = itemDetailUser.repo.toString()
+                tvCompany.text = itemDetailUser.company
+            }
                 showLoading(false)
             }
         })
-
-        with(binding){
-            Glide.with(this@UserDetailActivity)
-                    .load(user.photo)
-                    .apply(RequestOptions().override(55,55))
-                    .into(imgDetailPhoto)
-
-            tvDetailUsername.text = user.username
-            tvDetailFollowers.text = user.name
-            tvLocation.text = user.location
-            tvDetailFollowers.text = user.followers.toString()
-            tvDetailFollowing.text = user.following.toString()
-            tvDetailRepo.text = user.repo.toString()
-            tvCompany.text = user.company
-        }
-
-        pageAdapter()
+        Log.d("user:" , user.toString())
+        user.username?.let { pageAdapter(it) }
     }
 
-
-
-    private fun pageAdapter(){
+    private fun pageAdapter(username: String){
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
+        sectionsPagerAdapter.username = username
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabLayout)

@@ -16,9 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserDetailActivity" />
-        <activity android:name=".MainActivity">
-
+        <activity android:name=".UserDetailActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="User">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".MainActivity" android:launchMode="singleTop">
         </activity>
     </application>
 

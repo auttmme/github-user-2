@@ -1,7 +1,6 @@
 package com.auttmme.githubuser
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.auttmme.githubuser.databinding.ItemUserBinding

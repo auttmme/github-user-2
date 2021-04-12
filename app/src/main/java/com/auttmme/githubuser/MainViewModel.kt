@@ -13,6 +13,7 @@ import java.lang.Exception
 class MainViewModel : ViewModel() {
 
     val listUsers = MutableLiveData<ArrayList<User>>()
+    val userDetail = MutableLiveData<User>()
 
     fun setUser(username: String) {
         val listItems = ArrayList<User>()
@@ -20,7 +21,7 @@ class MainViewModel : ViewModel() {
         val url = "https://api.github.com/search/users?q=${username}"
 
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "token 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")
+        client.addHeader("Authorization", "")
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
@@ -31,7 +32,6 @@ class MainViewModel : ViewModel() {
                 try {
                     val result = responseBody?.let { String(it) }
                     val responseObject = JSONObject(result)
-                    Log.d("hasil", responseObject.toString())
                     val items = responseObject.getJSONArray("items")
 
                     for (i in 0 until items.length()) {
@@ -63,12 +63,12 @@ class MainViewModel : ViewModel() {
     }
 
     fun setDetail(username: String) {
-        val listDetailItems = ArrayList<User>()
+        val listDetailItems = User()
 
         val url = "https://api.github.com/users/${username}"
 
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "token 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")
+        client.addHeader("Authorization", "token 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")
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray?) {
@@ -86,9 +86,8 @@ class MainViewModel : ViewModel() {
                     itemDetailUser.repo = responseObject.getInt("public_repos")
                     itemDetailUser.followers = responseObject.getInt("followers")
                     itemDetailUser.following = responseObject.getInt("following")
-                    listDetailItems.add(itemDetailUser)
 
-                    listUsers.postValue(listDetailItems)
+                    userDetail.postValue(itemDetailUser)
                 } catch (e: Exception) {
                     Log.d("Exception", e.message.toString())
                 }
@@ -97,11 +96,10 @@ class MainViewModel : ViewModel() {
             override fun onFailure(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray?, error: Throwable?) {
                 Log.d("onFailure", error?.message.toString())
             }
-
         })
     }
 
-    fun getDetail(): LiveData<ArrayList<User>> {
-        return listUsers
+    fun getDetail(): LiveData<User> {
+        return userDetail
     }
 }
