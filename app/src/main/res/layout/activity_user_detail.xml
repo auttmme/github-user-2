@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:fillViewport="true"
-    tools:context=".UserDetailActivity">
+    tools:context=".detail.UserDetailActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,6 +47,20 @@
             android:layout_below="@id/tv_detail_fullName"
             android:layout_toEndOf="@id/img_detail_photo"
             tools:text="@string/icha_userName" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_toEndOf="@id/tv_detail_fullName"
+            android:contentDescription="@string/like_button"
+            android:backgroundTint="@color/secondary_purple"
+            app:srcCompat="@drawable/ic_baseline_favorite_24"
+            app:tint="@color/yellow_detail"/>
 
         <RelativeLayout
             android:id="@+id/location"

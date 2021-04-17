@@ -1,9 +1,10 @@
-package com.auttmme.githubuser
+package com.auttmme.githubuser.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.auttmme.githubuser.model.User
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
@@ -21,7 +22,7 @@ class MainViewModel : ViewModel() {
         val url = "https://api.github.com/search/users?q=${username}"
 
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "")
+        client.addHeader("Authorization", "token")
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
@@ -68,7 +69,7 @@ class MainViewModel : ViewModel() {
         val url = "https://api.github.com/users/${username}"
 
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "")
+        client.addHeader("Authorization", "token")
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray?) {

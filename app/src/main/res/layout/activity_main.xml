@@ -45,6 +45,16 @@
             android:backgroundTint="@color/purple_detail"/>
         </LinearLayout>
 
+    <ImageView
+        android:id="@+id/hello"
+        android:contentDescription="@string/hello"
+        android:layout_below="@id/relSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/hello"
+        android:visibility="visible" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_users"
         android:layout_width="match_parent"

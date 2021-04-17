@@ -10,11 +10,16 @@
     <string name="ct_location">location</string>
     <string name="ct_avatar">user avatar</string>
     <string name="ct_office">office</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="search_user">Search User</string>
     <string name="search">search</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="content_tab_followers">Fragment Followers</string>
     <string name="content_tab_following">Fragment Following</string>
-
+    <string name="hello">woman saying hi</string>
+    <string name="favorite">favorite</string>
+    <string name="key_alarm">alarm</string>
+    <string name="reminder">Reminder</string>
+    <string name="reminderAtNine">Reminder at 9.00 am</string>
+    <string name="goBack">Time to check Github User</string>
+    <string name="like_button">like button</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.auttmme.githubuser
+package com.auttmme.githubuser.detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.auttmme.githubuser.adapter.UserAdapter
 import com.auttmme.githubuser.databinding.FragmentFollowingBinding
+import com.auttmme.githubuser.viewmodel.FollowingViewModel
 
 class FollowingFragment : Fragment() {
 
@@ -38,7 +40,7 @@ class FollowingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val username = arguments?.getString(FollowingFragment.USERNAME)
+        val username = arguments?.getString(USERNAME)
         setRecyclerView(username)
 
         followingViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowingViewModel::class.java)

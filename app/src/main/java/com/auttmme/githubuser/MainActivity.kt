@@ -3,16 +3,16 @@ package com.auttmme.githubuser
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.auttmme.githubuser.adapter.UserAdapter
 import com.auttmme.githubuser.databinding.ActivityMainBinding
-import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpResponseHandler
-import cz.msebera.android.httpclient.Header
-import org.json.JSONObject
-import java.lang.Exception
+import com.auttmme.githubuser.detail.UserDetailActivity
+import com.auttmme.githubuser.model.User
+import com.auttmme.githubuser.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearch.setOnClickListener {
             val user = binding.edtSearch.text.toString()
             if (user.isEmpty()) return@setOnClickListener
+            showHello(false)
             showLoading(true)
             mainViewModel.setUser(user)
         }
@@ -61,6 +62,37 @@ class MainActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showHello(state: Boolean) {
+        if (state) {
+            binding.hello.visibility = View.VISIBLE
+        } else {
+            binding.hello.visibility = View.GONE
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        setMode(item.itemId)
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setMode(selectedMode: Int) {
+        when (selectedMode) {
+            R.id.favorite -> {
+                val favoriteIntent = Intent(this, FavoriteActivity::class.java)
+                startActivity(favoriteIntent)
+            }
+            R.id.setting -> {
+                val settingIntent = Intent(this, SettingActivity::class.java)
+                startActivity(settingIntent)
+            }
         }
     }
 }

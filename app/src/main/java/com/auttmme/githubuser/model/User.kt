@@ -1,10 +1,11 @@
-package com.auttmme.githubuser
+package com.auttmme.githubuser.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User (
+    var id: Int = 0,
     var photo: String? = "",
     var username: String? = "",
     var name: String? = "",

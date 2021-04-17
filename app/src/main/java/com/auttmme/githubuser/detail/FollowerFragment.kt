@@ -1,4 +1,4 @@
-package com.auttmme.githubuser
+package com.auttmme.githubuser.detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.auttmme.githubuser.adapter.UserAdapter
 import com.auttmme.githubuser.databinding.FragmentFollowerBinding
+import com.auttmme.githubuser.viewmodel.FollowersViewModel
 
 class FollowerFragment : Fragment() {
 

@@ -11,8 +11,10 @@
     <color name="grey_username">#5F666D</color>
     <color name="black_bar">#090A0B</color>
     <color name="purple_detail">#6E40C9</color>
-    <color name="yellow_detail">#F8E3A1</color>
+    <color name="yellow_detail">#ad1457</color>
     <color name="bg_darkNavy">#0D1117</color>
+    <color name="red">#FF313B</color>
+    <color name="secondary_purple">#b39ddb</color>
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#6E40C9</color>
 </resources>
