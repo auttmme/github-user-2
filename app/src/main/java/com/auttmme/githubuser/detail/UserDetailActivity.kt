@@ -3,6 +3,7 @@ package com.auttmme.githubuser.detail
 import android.content.ContentValues
 import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.auttmme.githubuser.R
 import com.auttmme.githubuser.adapter.SectionsPagerAdapter
 import com.auttmme.githubuser.databinding.ActivityUserDetailBinding
+import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion.CONTENT_URI
 import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion.PHOTO
 import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion.USERNAME
 import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion._ID
@@ -30,6 +32,7 @@ class UserDetailActivity : AppCompatActivity() {
     private lateinit var detailViewModel: MainViewModel
     private lateinit var userHelper: UserHelper
     private var position: Int = 0
+    private lateinit var uriWithId: Uri
 
     private var isFavorite = false
     private var dataUser: User? = null
@@ -126,6 +129,7 @@ class UserDetailActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             if (isFavorite) {
                 val result = userHelper.deleteById(user.id.toString())
+//                contentResolver.delete(uriWithId, null, null)
                 user.id = result
                 val intent = Intent()
                 intent.putExtra(EXTRA_POSITION, position)
@@ -138,9 +142,10 @@ class UserDetailActivity : AppCompatActivity() {
                 values.put(USERNAME, user.username)
                 values.put(PHOTO, user.photo)
 
-                val result = userHelper.insert(values)
-                user.id = result.toInt()
-                setResult(RESULT_ADD, intent)
+//                val result = userHelper.insert(values)
+                contentResolver.insert(CONTENT_URI, values)
+//                user.id = result.toInt()
+//                setResult(RESULT_ADD, intent)
                 isFavorite = true
             }
             setStatusFavorite(isFavorite)
@@ -153,5 +158,10 @@ class UserDetailActivity : AppCompatActivity() {
         } else {
             binding.fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        userHelper.close()
     }
 }

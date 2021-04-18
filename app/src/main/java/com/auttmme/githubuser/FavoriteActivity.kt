@@ -1,8 +1,11 @@
 package com.auttmme.githubuser
 
 import android.content.Intent
+import android.database.ContentObserver
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.auttmme.githubuser.adapter.UserAdapter
@@ -47,6 +50,18 @@ class FavoriteActivity : AppCompatActivity() {
             }
         })
 
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        val myObserver = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                loadUsersAsync()
+            }
+        }
+
+        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
+
         if (savedInstanceState == null) {
             loadUsersAsync()
         } else {
@@ -57,34 +72,33 @@ class FavoriteActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (data != null) {
-            when (requestCode) {
-                UserDetailActivity.REQUEST_ADD -> if (resultCode == UserDetailActivity.RESULT_ADD) {
-                    val user = data.getParcelableExtra<User>(UserDetailActivity.EXTRA_USER) as User
-
-                    adapter.addItem(user)
-                    binding.rvUsers.smoothScrollToPosition(adapter.itemCount -1)
-
-                    Log.d("mUser: ", user.toString())
-                    Log.d("mData: ", data.toString())
-                }
-                UserDetailActivity.RESULT_DELETE -> {
-                    val position = data.getIntExtra(UserDetailActivity.EXTRA_USER, 0)
-                    adapter.removeItem(position)
-                }
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (data != null) {
+//            when (requestCode) {
+//                UserDetailActivity.REQUEST_ADD -> if (resultCode == UserDetailActivity.RESULT_ADD) {
+//                    val user = data.getParcelableExtra<User>(UserDetailActivity.EXTRA_USER)
+//                    adapter.addItem(user)
+//                    binding.rvUsers.smoothScrollToPosition(adapter.itemCount -1)
+//
+//                    Log.d("mUser: ", user.toString())
+//                    Log.d("mData: ", data.toString())
+//                }
+//                UserDetailActivity.RESULT_DELETE -> {
+//                    val position = data.getIntExtra(UserDetailActivity.EXTRA_USER, 0)
+//                    adapter.removeItem(position)
+//                }
+//            }
+//        }
+//    }
 
     private fun loadUsersAsync() {
         GlobalScope.launch(Dispatchers.Main) {
             val userHelper = UserHelper.getInstance(applicationContext)
             userHelper.open()
             val deferredUsers = async(Dispatchers.IO) {
-                val cursor = userHelper.queryAll()
+                val cursor = contentResolver.query(CONTENT_URI, null, null, null, null)
                 MappingHelper.mapCursorToArrayList(cursor)
             }
             val favoriteUser = deferredUsers.await()

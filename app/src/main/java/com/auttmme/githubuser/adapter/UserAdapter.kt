@@ -15,7 +15,12 @@ class UserAdapter() : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     var mData = ArrayList<User>()
         set(mData) {
-            this.mData.clear()
+//            this.mData.clear()
+//            this.mData.addAll(mData)
+//            notifyDataSetChanged()
+            if (mData.size > 0) {
+                this.mData.clear()
+            }
             this.mData.addAll(mData)
             notifyDataSetChanged()
         }
