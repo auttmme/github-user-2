@@ -38,6 +38,7 @@ class MainViewModel : ViewModel() {
                     for (i in 0 until items.length()) {
                         val item = items.getJSONObject(i)
                         val itemUser = User()
+                        itemUser.id = item.getInt("id")
                         itemUser.username= item.getString("login")
                         itemUser.photo = item.getString("avatar_url")
                         listItems.add(itemUser)
@@ -79,6 +80,7 @@ class MainViewModel : ViewModel() {
                     Log.d("hasil", responseObject.toString())
 
                     val itemDetailUser = User()
+                    itemDetailUser.id = responseObject.getInt("id")
                     itemDetailUser.photo = responseObject.getString("avatar_url")
                     itemDetailUser.username = responseObject.getString("login")
                     itemDetailUser.name = responseObject.getString("name")

@@ -47,13 +47,13 @@ class UserAdapter() : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(mData[position])
+        holder.bind(mData[position], position)
     }
 
     override fun getItemCount(): Int = mData.size
 
     inner class UserViewHolder(private val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
+        fun bind(user: User, position: Int) {
             with(binding){
                 Glide.with(itemView.context)
                     .load(user.photo)
@@ -62,14 +62,14 @@ class UserAdapter() : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
                 txtUsername.text = user.username
 
-                itemView.setOnClickListener { onItemClickCallback?.onItemClicked(user) }
+                itemView.setOnClickListener { onItemClickCallback?.onItemClicked(user, position) }
                 //
             }
         }
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: User)
+        fun onItemClicked(data: User, position: Int)
     }
 
 }

@@ -3,6 +3,7 @@ package com.auttmme.githubuser
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.auttmme.githubuser.adapter.UserAdapter
 import com.auttmme.githubuser.databinding.ActivityFavoriteBinding
@@ -32,16 +33,15 @@ class FavoriteActivity : AppCompatActivity() {
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         binding.rvUsers.layoutManager = LinearLayoutManager(this)
         binding.rvUsers.setHasFixedSize(true)
         adapter = UserAdapter()
         binding.rvUsers.adapter = adapter
 
         adapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: User) {
+            override fun onItemClicked(data: User, position: Int) {
                 val intent = Intent(this@FavoriteActivity, UserDetailActivity::class.java)
+                intent.putExtra(UserDetailActivity.EXTRA_POSITION, position)
                 intent.putExtra(UserDetailActivity.EXTRA_USER, data)
                 startActivity(intent)
             }
@@ -67,6 +67,9 @@ class FavoriteActivity : AppCompatActivity() {
 
                     adapter.addItem(user)
                     binding.rvUsers.smoothScrollToPosition(adapter.itemCount -1)
+
+                    Log.d("mUser: ", user.toString())
+                    Log.d("mData: ", data.toString())
                 }
                 UserDetailActivity.RESULT_DELETE -> {
                     val position = data.getIntExtra(UserDetailActivity.EXTRA_USER, 0)
@@ -74,7 +77,6 @@ class FavoriteActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun loadUsersAsync() {
@@ -92,6 +94,7 @@ class FavoriteActivity : AppCompatActivity() {
                 adapter.mData = ArrayList()
             }
             userHelper.close()
+            Log.d("vvv: ", favoriteUser.toString())
         }
     }
 

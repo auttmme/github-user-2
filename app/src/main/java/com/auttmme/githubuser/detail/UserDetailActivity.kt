@@ -1,6 +1,7 @@
 package com.auttmme.githubuser.detail
 
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.auttmme.githubuser.adapter.SectionsPagerAdapter
 import com.auttmme.githubuser.databinding.ActivityUserDetailBinding
 import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion.PHOTO
 import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion.USERNAME
+import com.auttmme.githubuser.db.DatabaseContract.UserColumns.Companion._ID
 import com.auttmme.githubuser.db.UserHelper
 import com.auttmme.githubuser.model.User
 import com.auttmme.githubuser.viewmodel.MainViewModel
@@ -27,8 +29,10 @@ class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
     private lateinit var detailViewModel: MainViewModel
     private lateinit var userHelper: UserHelper
+    private var position: Int = 0
 
     private var isFavorite = false
+    private var dataUser: User? = null
 
     companion object {
         @StringRes
@@ -40,6 +44,7 @@ class UserDetailActivity : AppCompatActivity() {
         const val REQUEST_ADD = 100
         const val RESULT_ADD = 101
         const val RESULT_DELETE = 301
+        const val EXTRA_POSITION = "extra_position"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +58,8 @@ class UserDetailActivity : AppCompatActivity() {
         detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
 
         val user = intent.getParcelableExtra<User>(EXTRA_USER)
-
+        position = intent.getIntExtra(EXTRA_POSITION, 0)
+        dataUser = User()
         user.username?.let {
             if (user != null) {
                 detailViewModel.setDetail(it)
@@ -63,7 +69,7 @@ class UserDetailActivity : AppCompatActivity() {
 
         detailViewModel.getDetail().observe(this, {
             itemDetailUser -> if (itemDetailUser != null) {
-
+            dataUser = itemDetailUser
             with(binding){
                 Glide.with(this@UserDetailActivity)
                         .load(itemDetailUser.photo)
@@ -81,7 +87,6 @@ class UserDetailActivity : AppCompatActivity() {
                 showLoading(false)
             }
         })
-        Log.d("user:" , user.toString())
         user.username?.let { pageAdapter(it) }
 
         checkFavorite(user)
@@ -118,22 +123,26 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun floatingButton(user: User) {
-        setStatusFavorite(isFavorite)
         binding.fab.setOnClickListener {
             if (isFavorite) {
                 val result = userHelper.deleteById(user.id.toString())
                 user.id = result
+                val intent = Intent()
+                intent.putExtra(EXTRA_POSITION, position)
                 setResult(RESULT_DELETE, intent)
+                isFavorite = false
+                finish()
             } else {
                 val values = ContentValues()
+                values.put(_ID, user.id)
                 values.put(USERNAME, user.username)
                 values.put(PHOTO, user.photo)
 
                 val result = userHelper.insert(values)
                 user.id = result.toInt()
                 setResult(RESULT_ADD, intent)
+                isFavorite = true
             }
-            isFavorite !=isFavorite
             setStatusFavorite(isFavorite)
         }
     }

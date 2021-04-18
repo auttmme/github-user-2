@@ -25,6 +25,20 @@
             android:contentDescription="@string/ct_avatar"
             tools:src="@tools:sample/avatars" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_below="@id/img_detail_photo"
+            android:contentDescription="@string/like_button"
+            android:backgroundTint="@color/secondary_purple"
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+            app:tint="@color/yellow_detail"
+            android:focusable="true" />
+
         <TextView
             android:id="@+id/tv_detail_fullName"
             android:layout_width="wrap_content"
@@ -48,25 +62,11 @@
             android:layout_toEndOf="@id/img_detail_photo"
             tools:text="@string/icha_userName" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_toEndOf="@id/tv_detail_fullName"
-            android:contentDescription="@string/like_button"
-            android:backgroundTint="@color/secondary_purple"
-            app:srcCompat="@drawable/ic_baseline_favorite_24"
-            app:tint="@color/yellow_detail"/>
-
         <RelativeLayout
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/img_detail_photo"
+            android:layout_below="@id/fab"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp">
 
@@ -92,7 +92,7 @@
 
         <RelativeLayout
             android:id="@+id/company"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
@@ -131,6 +131,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:background="@color/bg_darkNavy"
+                android:baselineAligned="false"
                 android:weightSum="3">
 
                 <LinearLayout
